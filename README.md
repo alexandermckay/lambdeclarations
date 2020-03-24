@@ -1,4 +1,45 @@
-# Prettify Symbols Mode
+# Lambda Functions
+
+The purpose of this fork is to make Javascript/Typescript function declarations more concise.
+
+In my opinion named functions are superior to anonymous functions for several reasons:
+- Stack trace: named functions provide a hint in the stack trace of which part of your code is creating the exception. Whilst ES6 added name inference it is only one level deep.
+```javascript
+const sum = (a, b) => a # b // if this anonymous arrow function throws an error, the name is inferred to be sum
+const sum = (a) => (b) => a # b // if this anonymous arrow function throws an error, the name is not inferred to be sum
+```
+- Recursion: anonymous functions cannot be used recursively.
+- Readability: named functions are self-documenting.
+
+Additionally, I believe function declarations to be better practice than fat arrow functions for the following reasons:
+- Anonymity: arrow functions are anonymous.
+- Syntax differences: arrow functions have variations in their syntax.
+```javascript
+const getName = obj => obj.name // if using single argument must use parentheses
+const getName = obj => ({ name }) // if returning object must use parentheses
+const getName = (obj, key) => obj[key] // if using multiple arguments must use parentheses
+const getName = ({name}) => name // if destructuring must use parentheses
+const getName = ({name} = {name: 'Anon'}) => name // if using default parameters must use parentheses
+```
+
+This extensions enables you to write function declarations like this:
+```javascript
+λ extractKey(key) {
+  ⇛ λ passObj(obj) {
+    ⇛ obj[key]
+  }
+}
+// This is equivalent
+const extractKey = function(key) {
+  return function passObj(obj) {
+    return obj[key]
+  }
+}
+```
+
+This way you get the best of named function declarations with the conciseness of fat arrow function expressions. 
+
+I loved the original `vsc-prettify-symbols-mode` extension however it is no longer maintained and it is buggy with current versions of VSCode. I also wanted a specialised version of the extension that promoted the code style I believe to be good practice for Javascript/Typescript developers.
 
 Prettify symbols mode makes *visual* substitutions to your source code, e.g. displaying `fun` as `λ`, while never touching your code.
 
